@@ -46,8 +46,8 @@
 #define SPLASH_LINE_2 "Copyright (c) 2004 Bruno T. C. de Oliveira"
 
 /* how many characters wide the list window will be, by default */
-#define LISTWIN_DEFAULT_CHARS 8
-#define TERMWIN_DEFAULT_CHARS 80
+#define LISTWIN_DEFAULT_CHARS 40
+#define TERMWIN_DEFAULT_CHARS 1800
 #define TERMWIN_MIN 80
 
 #define RTFM "Syntax: omnitty [-W list_width] [-T term_width]\n" \
@@ -268,7 +268,16 @@ static void add_machines_from_file(const char *file) {
    minibuf_put(minibuf, pipe ? "Adding machines supplied by command..." :
                                "Adding machines from file...", 0x70);
 
-   while (1 == fscanf(f, "%s", buf)) machmgr_add(buf);
+   while (1 == fscanf(f, "%s", buf)) {
+       char port[128] = " -p ";
+       char *p = strchr(buf, ':');
+       if (p != NULL) {
+           strcpy(port + strlen(port), p+1);
+           *p = '\0';
+           strcat(buf, port);
+       }
+       machmgr_add(buf);
+   }
 
    if (pipe) {
       if (0 != pclose(f)) 

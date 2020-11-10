@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([omnitty], 0.3.0)
+AC_INIT([omnitty], 0.3.1)
 
 dnl Make the symbol PACKAGE_VERSION get exported
 AC_SUBST(PACKAGE_VERSION)
@@ -38,7 +38,7 @@ ROTE_LIBS=`rote-config --libs`
 if test $? -ne 0; then
    AC_MSG_ERROR([Error running rote-config --libs], [1])
 fi
-LIBS="$LIBS $ROTE_LIBS"
+LIBS="$LIBS $ROTE_LIBS -lncurses -ltinfo"
 
 AC_OUTPUT(Makefile)
 
